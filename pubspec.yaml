@@ -1,7 +1,7 @@
 name: hz_tools
 description: "A new Flutter package project."
 version: 0.0.1
-homepage:
+homepage: cn.itbox.www
 
 environment:
   sdk: '>=3.2.0 <4.0.0'
@@ -16,6 +16,9 @@ dependencies:
   intl: ^0.18.1
   rational: ^2.2.2
   decimal: ^2.3.3
+  logger: ^2.3.0
+  # 数据键值对本地存储
+  shared_preferences: ^2.2.2
 
 dev_dependencies:
   flutter_test:
