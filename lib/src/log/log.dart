@@ -21,12 +21,12 @@ class HzLog {
   );
 
   static PrettyPrinter get _defaultPrinter => PrettyPrinter(
-        methodCount: 1,
+        methodCount: 0,
         errorMethodCount: 8,
         lineLength: 120,
         colors: true,
         printEmojis: true,
-        printTime: true,
+        printTime: false,
       );
   static const String _defTag = 'HzLog';
   static String _tagValue = _defTag;
@@ -64,32 +64,32 @@ class HzLog {
   }
 
   static void d(String message, [dynamic error, StackTrace? stackTrace]) {
-    message = '$_tagValue debug| $message';
+    message = '$_tagValue: debug| $message';
     _logger.d(message, error: error, stackTrace: stackTrace);
   }
 
   static void i(String message, [dynamic error, StackTrace? stackTrace]) {
-    message = '$_tagValue info| $message';
+    message = '$_tagValue: info| $message';
     _logger.i(message, error: error, stackTrace: stackTrace);
   }
 
   static void w(String message, [dynamic error, StackTrace? stackTrace]) {
-    message = '$_tagValue warning| $message';
+    message = '$_tagValue: warning| $message';
     _logger.w(message, error: error, stackTrace: stackTrace);
   }
 
   static void e(String message, [dynamic error, StackTrace? stackTrace]) {
-    message = '$_tagValue error| $message';
+    message = '$_tagValue: error| $message';
     _logger.e(message, error: error, stackTrace: stackTrace);
   }
 
   static void t(String message, [dynamic error, StackTrace? stackTrace]) {
-    message = '$_tagValue trace| $message';
+    message = '$_tagValue: trace| $message';
     _logger.t(message, error: error, stackTrace: stackTrace);
   }
 
   static void f(String message, [dynamic error, StackTrace? stackTrace]) {
-    message = '$_tagValue fatal| $message';
+    message = '$_tagValue: fatal| $message';
     _logger.f(message, error: error, stackTrace: stackTrace);
   }
 }
