@@ -7,7 +7,6 @@ export 'src/encrypt_util.dart';
 export 'src/event_bus/event_bus.dart';
 export 'src/json_util.dart';
 export 'src/log/log.dart';
-export 'src/log/log_util.dart';
 export 'src/money_utils.dart';
 export 'src/num_util.dart';
 export 'src/object_util.dart';
