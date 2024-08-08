@@ -54,37 +54,66 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: const Text('Plugin example app'),
         ),
-        body:Column(children: [
-          const SizedBox(height: 100,),
-          Center(child:
-          GestureDetector(onTap: (){
-            _getVersion();
-
-          }, child: Container(width: 50,height: 50,color: Colors.red,),),),
-          const SizedBox(height: 100,),
-          Center(child:
-          GestureDetector(onTap: (){
-            _getDeviceId();
-
-          }, child: Container(width: 50,height: 50,color: Colors.green,),),),
-        ],),
+        body: Column(
+          children: [
+            const SizedBox(
+              height: 100,
+            ),
+            Center(
+              child: GestureDetector(
+                onTap: () {
+                  _getVersion();
+                },
+                child: Container(
+                  width: 50,
+                  height: 50,
+                  color: Colors.red,
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 100,
+            ),
+            Center(
+              child: GestureDetector(
+                onTap: () {
+                  _getDeviceId();
+                },
+                child: Container(
+                  width: 50,
+                  height: 50,
+                  color: Colors.green,
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            GestureDetector(
+              onTap: () async{
+                await _corePlugin.complianceInit(false);
+              },
+              child: Container(
+                width: 50,
+                height: 50,
+                color: Colors.blue,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
   /// 获取version，给_version赋值
   void _getVersion() async {
-
     String? version = await _corePlugin.getAppVersionName();
     debugPrint("版本号+——+——+——+——+——+——+——+——+——${version!}");
   }
 
   /// 获取version，给_version赋值
   void _getDeviceId() async {
-
     String? version = await _corePlugin.getDeviceId();
     debugPrint("设备标识+——+——+——+——+——+——+——+——+——${version!}");
   }
-
-
 }

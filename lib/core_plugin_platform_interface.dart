@@ -27,9 +27,12 @@ abstract class CorePluginPlatform extends PlatformInterface {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
   Future<String?> getAppVersionName() {
-    throw UnimplementedError('platformVersion() has not been implemented.');
+    throw UnimplementedError('getAppVersionName() has not been implemented.');
   }
   Future<String?> getDeviceId() {
-    throw UnimplementedError('platformVersion() has not been implemented.');
+    throw UnimplementedError('getDeviceId() has not been implemented.');
+  }
+  Future<String?> complianceInit(bool isDebug) {
+    throw UnimplementedError('complianceInit() has not been implemented.');
   }
 }

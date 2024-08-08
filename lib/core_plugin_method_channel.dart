@@ -39,4 +39,16 @@ class MethodChannelCorePlugin extends CorePluginPlatform {
       return '';
     }
   }
+
+  ///合规初始化
+  @override
+  Future<String> complianceInit(bool isDebug) async{
+    try {
+      final String result = (await methodChannel.invokeMethod<String>(
+          'complianceInit',isDebug)) as String;
+      return result;
+    } catch (e) {
+      return '';
+    }
+  }
 }
