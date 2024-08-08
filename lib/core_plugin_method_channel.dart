@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
@@ -35,6 +37,22 @@ class MethodChannelCorePlugin extends CorePluginPlatform {
       final String result = (await methodChannel.invokeMethod<String>(
           'getDeviceId')) as String;
       return result;
+    } catch (e) {
+      return '';
+    }
+  }
+
+  ///合规初始化
+  @override
+  Future<String> complianceInit(bool isDebug) async{
+    try {
+      if(Platform.isAndroid){
+        final String result = (await methodChannel.invokeMethod<String>(
+            'complianceInit',isDebug)) as String;
+        return result;
+      }else{
+        return '';
+      }
     } catch (e) {
       return '';
     }

@@ -17,4 +17,7 @@ class CorePlugin {
   Future<String?> getDeviceId() {
     return CorePluginPlatform.instance.getDeviceId();
   }
+   Future<String?> complianceInit(bool isDebug) {
+     return CorePluginPlatform.instance.complianceInit(isDebug);
+   }
 }

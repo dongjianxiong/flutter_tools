@@ -63,7 +63,9 @@ class CorePlugin: FlutterPlugin, MethodCallHandler {
       }
       if (context != null) {
       }
-    } else {
+    } else if(call.method == "complianceInit"){
+      CoreEngine.delegate?.onComplianceInit(call.arguments as Boolean)
+    }else {
       result.notImplemented()
     }
   }
