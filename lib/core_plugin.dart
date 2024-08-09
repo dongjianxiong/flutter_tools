@@ -8,16 +8,32 @@
 import 'core_plugin_platform_interface.dart';
 
 class CorePlugin {
-   Future<String?> getPlatformVersion() {
+  Future<String?> getPlatformVersion() {
     return CorePluginPlatform.instance.getPlatformVersion();
   }
+
   Future<String?> getAppVersionName() {
     return CorePluginPlatform.instance.getAppVersionName();
   }
+
   Future<String?> getDeviceId() {
     return CorePluginPlatform.instance.getDeviceId();
   }
-   Future<String?> complianceInit(bool isDebug) {
-     return CorePluginPlatform.instance.complianceInit(isDebug);
-   }
+
+  Future<String?> complianceInit() {
+    return CorePluginPlatform.instance.complianceInit();
+  }
+
+  Future<String?> activeInit() {
+    return CorePluginPlatform.instance.activeInit();
+  }
+
+  Future<bool> isProtocolAgree() {
+    return CorePluginPlatform.instance.isProtocolAgree();
+  }
+
+  Future<void> setProtocol(bool agree) {
+    return CorePluginPlatform.instance.setProtocol(agree);
+  }
+
 }

@@ -32,7 +32,16 @@ abstract class CorePluginPlatform extends PlatformInterface {
   Future<String?> getDeviceId() {
     throw UnimplementedError('getDeviceId() has not been implemented.');
   }
-  Future<String?> complianceInit(bool isDebug) {
+  Future<String?> complianceInit() {
     throw UnimplementedError('complianceInit() has not been implemented.');
+  }
+  Future<String?> activeInit() {
+    throw UnimplementedError('activeInit() has not been implemented.');
+  }
+  Future<bool> isProtocolAgree() {
+    throw UnimplementedError('isProtocolAgree() has not been implemented.');
+  }
+  Future<void> setProtocol(bool agree) {
+    throw UnimplementedError('setProtocol() has not been implemented.');
   }
 }
