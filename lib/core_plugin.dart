@@ -8,6 +8,7 @@
 import 'core_plugin_platform_interface.dart';
 
 class CorePlugin {
+
   Future<String?> getPlatformVersion() {
     return CorePluginPlatform.instance.getPlatformVersion();
   }
@@ -28,12 +29,16 @@ class CorePlugin {
     return CorePluginPlatform.instance.activeInit();
   }
 
-  Future<bool> isProtocolAgree() {
+  bool isProtocolAgree() {
     return CorePluginPlatform.instance.isProtocolAgree();
   }
 
-  Future<void> setProtocol(bool agree) {
+  void setProtocol(bool agree) {
     return CorePluginPlatform.instance.setProtocol(agree);
+  }
+
+  Future<String> getFlavorsName() {
+    return CorePluginPlatform.instance.getFlavorsName();
   }
 
 }

@@ -118,8 +118,8 @@ class _MyAppState extends State<MyApp> {
               height: 20,
             ),
             GestureDetector(
-              onTap: () async{
-                await _corePlugin.setProtocol(false);
+              onTap: (){
+                _corePlugin.setProtocol(false);
               },
               child: Container(
                 width: 50,

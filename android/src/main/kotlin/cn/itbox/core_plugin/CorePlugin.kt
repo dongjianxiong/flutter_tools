@@ -67,12 +67,30 @@ class CorePlugin : FlutterPlugin, MethodCallHandler {
             CoreEngine.delegate?.onComplianceInit()
         } else if (call.method == "activeInit") {
             CoreEngine.delegate?.activeInit()
-        } else {
+        } else if(call.method == "getFlavorsName"){
+            result.success(getFlavorsName())
+        }else {
             result.notImplemented()
         }
     }
 
     override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         channel.setMethodCallHandler(null)
+    }
+
+    private fun getFlavorsName(): String? {
+        val packageManager = context?.packageManager
+        val packageName = context?.packageName
+
+        // 直接尝试获取 ApplicationInfo，并处理异常
+        return try {
+            val applicationInfo =
+                packageName?.let { packageManager?.getApplicationInfo(it, PackageManager.GET_META_DATA) }
+            applicationInfo?.metaData?.getString("UMENG_CHANNEL") ?: "unknown"
+        } catch (e: PackageManager.NameNotFoundException) {
+            // 记录异常信息
+            Log.e("getChannel", "Failed to find package name: ${e.message}")
+            "unknown"
+        }
     }
 }
