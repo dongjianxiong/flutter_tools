@@ -15,8 +15,7 @@ class MethodChannelCorePlugin extends CorePluginPlatform {
 
   @override
   Future<String?> getPlatformVersion() async {
-    final version =
-        await methodChannel.invokeMethod<String>('getPlatformVersion');
+    final version = await methodChannel.invokeMethod<String>('getPlatformVersion');
     return version;
   }
 
@@ -24,8 +23,8 @@ class MethodChannelCorePlugin extends CorePluginPlatform {
   @override
   Future<String?> getAppVersionName() async {
     try {
-      final String result = (await methodChannel
-          .invokeMethod<String>('getAppVersionName')) as String;
+      final String result =
+          (await methodChannel.invokeMethod<String>('getAppVersionName')) as String;
       return result;
     } catch (e) {
       return '1.0.0';
@@ -36,8 +35,7 @@ class MethodChannelCorePlugin extends CorePluginPlatform {
   @override
   Future<String?> getDeviceId() async {
     try {
-      final String result =
-          (await methodChannel.invokeMethod<String>('getDeviceId')) as String;
+      final String result = (await methodChannel.invokeMethod<String>('getDeviceId')) as String;
       return result;
     } catch (e) {
       return '';
@@ -48,10 +46,10 @@ class MethodChannelCorePlugin extends CorePluginPlatform {
   @override
   Future<String> complianceInit() async {
     try {
+      setProtocol(true);
       if (Platform.isAndroid) {
-        setProtocol(true);
-        final String result = (await methodChannel.invokeMethod<String>(
-            'complianceInit')) as String;
+        final String result =
+            (await methodChannel.invokeMethod<String>('complianceInit')) as String;
         return result;
       } else {
         return '';
@@ -63,11 +61,10 @@ class MethodChannelCorePlugin extends CorePluginPlatform {
 
   ///主动初始化
   @override
-  Future<String> activeInit() async{
+  Future<String> activeInit() async {
     try {
       if (Platform.isAndroid) {
-        final String result = (await methodChannel.invokeMethod<String>(
-            'activeInit')) as String;
+        final String result = (await methodChannel.invokeMethod<String>('activeInit')) as String;
         return result;
       } else {
         return '';
@@ -79,7 +76,7 @@ class MethodChannelCorePlugin extends CorePluginPlatform {
 
   ///是否同意协议
   @override
-  Future<bool> isProtocolAgree() async{
+  Future<bool> isProtocolAgree() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final bool? agree = prefs.getBool(CoreConstants.agreeKey);
     return agree == true;
@@ -87,7 +84,7 @@ class MethodChannelCorePlugin extends CorePluginPlatform {
 
   ///设置协议状态
   @override
-  Future<void> setProtocol(bool agree) async{
+  Future<void> setProtocol(bool agree) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool(CoreConstants.agreeKey, agree);
   }
