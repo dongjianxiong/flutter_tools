@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'core_constants.dart';
 import 'core_plugin_platform_interface.dart';
@@ -11,6 +12,13 @@ class MethodChannelCorePlugin extends CorePluginPlatform {
   /// The method channel used to interact with the native platform.
   @visibleForTesting
   final methodChannel = const MethodChannel('itbox_core_plugin');
+
+  late SharedPreferences prefs;
+
+  @override
+  Future<void> init() async {
+    prefs = await SharedPreferences.getInstance();
+  }
 
   @override
   Future<String?> getPlatformVersion() async {

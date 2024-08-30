@@ -8,6 +8,9 @@
 import 'core_plugin_platform_interface.dart';
 
 class CorePlugin {
+  Future<void> init() {
+    return CorePluginPlatform.instance.init();
+  }
 
   Future<String?> getPlatformVersion() {
     return CorePluginPlatform.instance.getPlatformVersion();
