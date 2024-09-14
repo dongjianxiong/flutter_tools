@@ -1,38 +1,36 @@
 import Flutter
 import UIKit
 
-struct CorePluginStruct {
-    static let itboxCorePlugin = "itbox_core_plugin"
-    static let getPlatformVersion = "getPlatformVersion"
-    static let getAppVersionName = "getAppVersionName"
-    static let getDeviceId = "getDeviceId"
+let CPItboxCorePluginCnanelName = "itbox_core_plugin"
 
-}
+// flutter=>Native
+let CPGetPlatformVersionMethod = "getPlatformVersion"
+let CPGetAppVersionNameMethod = "getAppVersionName"
+let CPGetDeviceIdMethod = "getDeviceId"
 
 public class CorePlugin: NSObject, FlutterPlugin {
     
     
     var channel: FlutterMethodChannel!
     public static func register(with registrar: FlutterPluginRegistrar) {
-        let channel = FlutterMethodChannel(name: CorePluginStruct.itboxCorePlugin, binaryMessenger: registrar.messenger())
+        let channel = FlutterMethodChannel(name: CPItboxCorePluginCnanelName, binaryMessenger: registrar.messenger())
         let instance = CorePlugin()
         registrar.addApplicationDelegate(instance)
         registrar.addMethodCallDelegate(instance, channel: channel)
         instance.channel = channel
         registrar.publish(instance)
-
     }
 
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         switch call.method {
-        case CorePluginStruct.getPlatformVersion:
+        case CPGetPlatformVersionMethod:
           result("iOS " + UIDevice.current.systemVersion)
             break
-        case CorePluginStruct.getAppVersionName:
+        case CPGetAppVersionNameMethod:
             let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
             result(version)
             break
-        case CorePluginStruct.getDeviceId:
+        case CPGetDeviceIdMethod:
             // 获取设备id
             let deviceId = UIDevice.current.identifierForVendor?.uuidString
             result(deviceId)

@@ -7,6 +7,10 @@
 
 import Foundation
 
+// native=>flutter
+let CPOnLifecycleChangedMethod = "onLifecycleChanged"
+
+
 extension CorePlugin: UIApplicationDelegate {
      
 
@@ -15,7 +19,7 @@ extension CorePlugin: UIApplicationDelegate {
         // 处理应用进入前台事件
         print("App became active from AppDelegate")
         if let channel = self.channel {
-            channel.invokeMethod("onLifecycleChanged", arguments: ["state":"foreground"])
+            channel.invokeMethod(CPOnLifecycleChangedMethod, arguments: ["state":"foreground"])
         }
     }
 
@@ -23,7 +27,7 @@ extension CorePlugin: UIApplicationDelegate {
        // 处理应用进入后台事件
        print("App entered background from AppDelegate")
         if let channel = self.channel {
-            channel.invokeMethod("onLifecycleChanged", arguments: ["state":"background"])
+            channel.invokeMethod(CPOnLifecycleChangedMethod, arguments: ["state":"background"])
         }
     }
 
