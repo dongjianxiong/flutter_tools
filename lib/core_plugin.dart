@@ -5,7 +5,7 @@
 // platforms in the `pubspec.yaml` at
 // https://flutter.dev/docs/development/packages-and-plugins/developing-packages#plugin-platforms.
 
-import 'core_plugin_platform_interface.dart';
+import 'package:core_plugin/platform_interface.dart';
 
 class CorePlugin {
   Future<void> init() {
@@ -43,5 +43,4 @@ class CorePlugin {
   Future<String> getFlavorsName() {
     return CorePluginPlatform.instance.getFlavorsName();
   }
-
 }

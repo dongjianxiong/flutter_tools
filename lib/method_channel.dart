@@ -1,11 +1,11 @@
 import 'dart:io';
 
+import 'package:core_plugin/platform_interface.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'core_constants.dart';
-import 'core_plugin_platform_interface.dart';
 
 /// An implementation of [CorePluginPlatform] that uses method channels.
 class MethodChannelCorePlugin extends CorePluginPlatform {
@@ -22,8 +22,7 @@ class MethodChannelCorePlugin extends CorePluginPlatform {
 
   @override
   Future<String?> getPlatformVersion() async {
-    final version =
-        await methodChannel.invokeMethod<String>('getPlatformVersion');
+    final version = await methodChannel.invokeMethod<String>('getPlatformVersion');
     return version;
   }
 
@@ -31,8 +30,8 @@ class MethodChannelCorePlugin extends CorePluginPlatform {
   @override
   Future<String?> getAppVersionName() async {
     try {
-      final String result = (await methodChannel
-          .invokeMethod<String>('getAppVersionName')) as String;
+      final String result =
+          (await methodChannel.invokeMethod<String>('getAppVersionName')) as String;
       return result;
     } catch (e) {
       return '1.0.0';
@@ -43,8 +42,7 @@ class MethodChannelCorePlugin extends CorePluginPlatform {
   @override
   Future<String?> getDeviceId() async {
     try {
-      final String result =
-          (await methodChannel.invokeMethod<String>('getDeviceId')) as String;
+      final String result = (await methodChannel.invokeMethod<String>('getDeviceId')) as String;
       return result;
     } catch (e) {
       return '';
@@ -57,8 +55,8 @@ class MethodChannelCorePlugin extends CorePluginPlatform {
     try {
       setProtocol(true);
       if (Platform.isAndroid) {
-        final String result = (await methodChannel
-            .invokeMethod<String>('complianceInit')) as String;
+        final String result =
+            (await methodChannel.invokeMethod<String>('complianceInit')) as String;
         return result;
       } else {
         return '';
@@ -73,8 +71,7 @@ class MethodChannelCorePlugin extends CorePluginPlatform {
   Future<String> activeInit() async {
     try {
       if (Platform.isAndroid) {
-        final String result =
-            (await methodChannel.invokeMethod<String>('activeInit')) as String;
+        final String result = (await methodChannel.invokeMethod<String>('activeInit')) as String;
         return result;
       } else {
         return '';
@@ -94,15 +91,15 @@ class MethodChannelCorePlugin extends CorePluginPlatform {
   ///设置协议状态
   @override
   void setProtocol(bool agree) {
-     prefs.setBool(CoreConstants.agreeKey, agree);
+    prefs.setBool(CoreConstants.agreeKey, agree);
   }
 
   @override
   Future<String> getFlavorsName() async {
     try {
       if (Platform.isAndroid) {
-        final String result = (await methodChannel
-            .invokeMethod<String>('getFlavorsName')) as String;
+        final String result =
+            (await methodChannel.invokeMethod<String>('getFlavorsName')) as String;
         return result;
       } else if (Platform.isIOS) {
         return 'AppStore';
