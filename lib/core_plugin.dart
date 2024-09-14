@@ -5,43 +5,45 @@
 // platforms in the `pubspec.yaml` at
 // https://flutter.dev/docs/development/packages-and-plugins/developing-packages#plugin-platforms.
 
-import 'core_plugin_platform_interface.dart';
+import 'package:core_plugin/platform_interface.dart';
+
+export 'package:core_plugin/lifecycle/app_lifecycle.dart';
+export 'package:core_plugin/lifecycle/observer.dart';
 
 class CorePlugin {
-  Future<void> init() {
+  static Future<void> init() {
     return CorePluginPlatform.instance.init();
   }
 
-  Future<String?> getPlatformVersion() {
+  static Future<String?> getPlatformVersion() {
     return CorePluginPlatform.instance.getPlatformVersion();
   }
 
-  Future<String?> getAppVersionName() {
+  static Future<String?> getAppVersionName() {
     return CorePluginPlatform.instance.getAppVersionName();
   }
 
-  Future<String?> getDeviceId() {
+  static Future<String?> getDeviceId() {
     return CorePluginPlatform.instance.getDeviceId();
   }
 
-  Future<String?> complianceInit() {
+  static Future<String?> complianceInit() {
     return CorePluginPlatform.instance.complianceInit();
   }
 
-  Future<String?> activeInit() {
+  static Future<String?> activeInit() {
     return CorePluginPlatform.instance.activeInit();
   }
 
-  bool isProtocolAgree() {
+  static bool isProtocolAgree() {
     return CorePluginPlatform.instance.isProtocolAgree();
   }
 
-  void setProtocol(bool agree) {
+  static void setProtocol(bool agree) {
     return CorePluginPlatform.instance.setProtocol(agree);
   }
 
-  Future<String> getFlavorsName() {
+  static Future<String> getFlavorsName() {
     return CorePluginPlatform.instance.getFlavorsName();
   }
-
 }
