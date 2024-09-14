@@ -4,11 +4,12 @@ import 'core_plugin_method_channel.dart';
 
 abstract class CorePluginPlatform extends PlatformInterface {
   /// Constructs a CorePluginPlatform.
-  CorePluginPlatform() : super(token: _token);
 
   static final Object _token = Object();
 
   static CorePluginPlatform _instance = MethodChannelCorePlugin();
+
+  CorePluginPlatform() : super(token: _token);
 
   /// The default instance of [CorePluginPlatform] to use.
   ///
@@ -26,13 +27,36 @@ abstract class CorePluginPlatform extends PlatformInterface {
   Future<String?> getPlatformVersion() {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
+
   Future<String?> getAppVersionName() {
     throw UnimplementedError('getAppVersionName() has not been implemented.');
   }
+
   Future<String?> getDeviceId() {
     throw UnimplementedError('getDeviceId() has not been implemented.');
   }
-  Future<String?> complianceInit(bool isDebug) {
+
+  Future<String?> complianceInit() {
     throw UnimplementedError('complianceInit() has not been implemented.');
+  }
+
+  Future<String?> activeInit() {
+    throw UnimplementedError('activeInit() has not been implemented.');
+  }
+
+  bool isProtocolAgree() {
+    throw UnimplementedError('isProtocolAgree() has not been implemented.');
+  }
+
+  void setProtocol(bool agree) {
+    throw UnimplementedError('setProtocol() has not been implemented.');
+  }
+
+  Future<String> getFlavorsName() {
+    throw UnimplementedError('getFlavorsName() has not been implemented.');
+  }
+
+  Future<void> init() {
+    throw UnimplementedError('init() has not been implemented.');
   }
 }

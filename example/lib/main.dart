@@ -91,12 +91,41 @@ class _MyAppState extends State<MyApp> {
             ),
             GestureDetector(
               onTap: () async{
-                await _corePlugin.complianceInit(false);
+                await _corePlugin.complianceInit();
               },
               child: Container(
                 width: 50,
                 height: 50,
                 color: Colors.blue,
+                child: const Text('同意'),
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            GestureDetector(
+              onTap: () async{
+                await _corePlugin.activeInit();
+              },
+              child: Container(
+                width: 50,
+                height: 50,
+                color: Colors.pink,
+                child: const Text('主动'),
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            GestureDetector(
+              onTap: (){
+                _corePlugin.setProtocol(false);
+              },
+              child: Container(
+                width: 50,
+                height: 50,
+                color: Colors.blueGrey,
+                child: const Text('设置'),
               ),
             ),
           ],

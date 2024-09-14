@@ -2,7 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import 'core_constants.dart';
 import 'core_plugin_platform_interface.dart';
 
 /// An implementation of [CorePluginPlatform] that uses method channels.
@@ -11,9 +13,17 @@ class MethodChannelCorePlugin extends CorePluginPlatform {
   @visibleForTesting
   final methodChannel = const MethodChannel('itbox_core_plugin');
 
+  late SharedPreferences prefs;
+
+  @override
+  Future<void> init() async {
+    prefs = await SharedPreferences.getInstance();
+  }
+
   @override
   Future<String?> getPlatformVersion() async {
-    final version = await methodChannel.invokeMethod<String>('getPlatformVersion');
+    final version =
+        await methodChannel.invokeMethod<String>('getPlatformVersion');
     return version;
   }
 
@@ -21,21 +31,20 @@ class MethodChannelCorePlugin extends CorePluginPlatform {
   @override
   Future<String?> getAppVersionName() async {
     try {
-      final String result = (await methodChannel.invokeMethod<String>(
-          'getAppVersionName')) as String;
+      final String result = (await methodChannel
+          .invokeMethod<String>('getAppVersionName')) as String;
       return result;
     } catch (e) {
       return '1.0.0';
     }
   }
 
-
   /// 获取APP设备Id
   @override
   Future<String?> getDeviceId() async {
     try {
-      final String result = (await methodChannel.invokeMethod<String>(
-          'getDeviceId')) as String;
+      final String result =
+          (await methodChannel.invokeMethod<String>('getDeviceId')) as String;
       return result;
     } catch (e) {
       return '';
@@ -44,17 +53,64 @@ class MethodChannelCorePlugin extends CorePluginPlatform {
 
   ///合规初始化
   @override
-  Future<String> complianceInit(bool isDebug) async{
+  Future<String> complianceInit() async {
     try {
-      if(Platform.isAndroid){
-        final String result = (await methodChannel.invokeMethod<String>(
-            'complianceInit',isDebug)) as String;
+      setProtocol(true);
+      if (Platform.isAndroid) {
+        final String result = (await methodChannel
+            .invokeMethod<String>('complianceInit')) as String;
         return result;
-      }else{
+      } else {
         return '';
       }
     } catch (e) {
       return '';
+    }
+  }
+
+  ///主动初始化
+  @override
+  Future<String> activeInit() async {
+    try {
+      if (Platform.isAndroid) {
+        final String result =
+            (await methodChannel.invokeMethod<String>('activeInit')) as String;
+        return result;
+      } else {
+        return '';
+      }
+    } catch (e) {
+      return '';
+    }
+  }
+
+  ///是否同意协议
+  @override
+  bool isProtocolAgree() {
+    final bool? agree = prefs.getBool(CoreConstants.agreeKey);
+    return agree == true;
+  }
+
+  ///设置协议状态
+  @override
+  void setProtocol(bool agree) {
+     prefs.setBool(CoreConstants.agreeKey, agree);
+  }
+
+  @override
+  Future<String> getFlavorsName() async {
+    try {
+      if (Platform.isAndroid) {
+        final String result = (await methodChannel
+            .invokeMethod<String>('getFlavorsName')) as String;
+        return result;
+      } else if (Platform.isIOS) {
+        return 'AppStore';
+      } else {
+        return 'unknown';
+      }
+    } catch (e) {
+      return 'unknown';
     }
   }
 }
