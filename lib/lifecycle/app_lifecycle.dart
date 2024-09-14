@@ -28,20 +28,20 @@ class AppLifecycleBinding {
 
   AppLifecycleState _state = AppLifecycleState.foreground;
 
-  final List<AppLifecycleObserver> _observers = <AppLifecycleObserver>[];
+  final List<NativeAppLifecycleObserver> _observers = <NativeAppLifecycleObserver>[];
 
-  void addObserver(AppLifecycleObserver observer) {
+  void addObserver(NativeAppLifecycleObserver observer) {
     if (!_observers.contains(observer)) {
       _observers.add(observer);
     }
   }
 
-  bool removeObserver(AppLifecycleObserver observer) => _observers.remove(observer);
+  bool removeObserver(NativeAppLifecycleObserver observer) => _observers.remove(observer);
 
   void dispatchLocalesChanged(AppLifecycleState state) {
     _state = state;
     debugPrint('[INFO] [AppLifecycleState] App lifecycle state changed: $state');
-    for (final AppLifecycleObserver observer in _observers) {
+    for (final NativeAppLifecycleObserver observer in _observers) {
       if (state == AppLifecycleState.foreground) {
         observer.onForeground();
       } else if (state == AppLifecycleState.background) {
