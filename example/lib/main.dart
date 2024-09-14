@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
 import 'dart:async';
 
-import 'package:flutter/services.dart';
 import 'package:core_plugin/core_plugin.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +17,6 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String _platformVersion = 'Unknown';
-  final _corePlugin = CorePlugin();
 
   @override
   void initState() {
@@ -31,8 +30,7 @@ class _MyAppState extends State<MyApp> {
     // Platform messages may fail, so we use a try/catch PlatformException.
     // We also handle the message potentially returning null.
     try {
-      platformVersion =
-          await _corePlugin.getPlatformVersion() ?? 'Unknown platform version';
+      platformVersion = await CorePlugin.getPlatformVersion() ?? 'Unknown platform version';
     } on PlatformException {
       platformVersion = 'Failed to get platform version.';
     }
@@ -90,8 +88,8 @@ class _MyAppState extends State<MyApp> {
               height: 20,
             ),
             GestureDetector(
-              onTap: () async{
-                await _corePlugin.complianceInit();
+              onTap: () async {
+                await CorePlugin.complianceInit();
               },
               child: Container(
                 width: 50,
@@ -104,8 +102,8 @@ class _MyAppState extends State<MyApp> {
               height: 20,
             ),
             GestureDetector(
-              onTap: () async{
-                await _corePlugin.activeInit();
+              onTap: () async {
+                await CorePlugin.activeInit();
               },
               child: Container(
                 width: 50,
@@ -118,8 +116,8 @@ class _MyAppState extends State<MyApp> {
               height: 20,
             ),
             GestureDetector(
-              onTap: (){
-                _corePlugin.setProtocol(false);
+              onTap: () {
+                CorePlugin.setProtocol(false);
               },
               child: Container(
                 width: 50,
@@ -136,13 +134,13 @@ class _MyAppState extends State<MyApp> {
 
   /// 获取version，给_version赋值
   void _getVersion() async {
-    String? version = await _corePlugin.getAppVersionName();
+    String? version = await CorePlugin.getAppVersionName();
     debugPrint("版本号+——+——+——+——+——+——+——+——+——${version!}");
   }
 
   /// 获取version，给_version赋值
   void _getDeviceId() async {
-    String? version = await _corePlugin.getDeviceId();
+    String? version = await CorePlugin.getDeviceId();
     debugPrint("设备标识+——+——+——+——+——+——+——+——+——${version!}");
   }
 }
