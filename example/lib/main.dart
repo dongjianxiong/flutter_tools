@@ -4,7 +4,9 @@ import 'package:core_plugin/core_plugin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await CorePlugin.init();
   runApp(const MyApp());
 }
 
@@ -15,13 +17,31 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends State<MyApp> with AppLifecycleObserver {
   String _platformVersion = 'Unknown';
 
   @override
   void initState() {
     super.initState();
+    print('initState');
     initPlatformState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    print('didChangeDependencies');
+    AppLifecycleBinding.instance.addObserver(this);
+    super.didChangeDependencies();
+  }
+
+  @override
+  void onBackground() {
+    debugPrint('lifecycle onBackground');
+  }
+
+  @override
+  void onForeground() {
+    debugPrint('lifecycle onForeground');
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.

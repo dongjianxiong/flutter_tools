@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
 
 import 'observer.dart';
 
@@ -12,7 +11,7 @@ enum AppLifecycleState {
 
   static AppLifecycleState fromState(dynamic state) {
     return AppLifecycleState.values.firstWhere(
-      (element) => element.state == state,
+      (element) => element.state == state || state == element.name,
       orElse: () => AppLifecycleState.foreground,
     );
   }
@@ -23,52 +22,31 @@ class AppLifecycleBinding {
   factory AppLifecycleBinding() => _instance;
 
   static AppLifecycleBinding get instance => _instance;
-  AppLifecycleBinding._() {
-    _channel.setMethodCallHandler((call) {
-      switch (call.method) {
-        case 'onAppLifecycleStateChanged':
-          debugPrint('[INFO] [AppLifecycleState] onAppLifecycleStateChanged: ${call.arguments}');
-          assert(call.arguments is int);
-          int sate = call.arguments as int? ?? 1;
-          _handleAppLifecycleStateChanged(AppLifecycleState.fromState(sate));
-          break;
-      }
-      return Future<void>.value();
-    });
-  }
+  AppLifecycleBinding._() {}
+
   bool get isInForeground => _state == AppLifecycleState.foreground;
 
-  final AppLifecycleState _state = AppLifecycleState.foreground;
-
-  final MethodChannel _channel = const MethodChannel('itbox_core_plugin');
-
-  void _handleAppLifecycleStateChanged(AppLifecycleState state) {
-    switch (state) {
-      case AppLifecycleState.foreground:
-        debugPrint('[INFO] [AppLifecycleState] App is foreground');
-        break;
-      case AppLifecycleState.background:
-        debugPrint('[INFO] [AppLifecycleState] App is background');
-        break;
-    }
-    dispatchLocalesChanged(state);
-  }
+  AppLifecycleState _state = AppLifecycleState.foreground;
 
   final List<AppLifecycleObserver> _observers = <AppLifecycleObserver>[];
 
-  void addObserver(AppLifecycleObserver observer) => _observers.add(observer);
+  void addObserver(AppLifecycleObserver observer) {
+    if (!_observers.contains(observer)) {
+      _observers.add(observer);
+    }
+  }
 
   bool removeObserver(AppLifecycleObserver observer) => _observers.remove(observer);
 
-  @protected
   void dispatchLocalesChanged(AppLifecycleState state) {
+    _state = state;
     for (final AppLifecycleObserver observer in _observers) {
       if (state == AppLifecycleState.foreground) {
         observer.onForeground();
       } else if (state == AppLifecycleState.background) {
         observer.onBackground();
       } else {
-        print('[WARNING] Unknown AppLifecycleState: $state');
+        debugPrint('[WARNING] Unknown AppLifecycleState: $state');
       }
     }
   }
