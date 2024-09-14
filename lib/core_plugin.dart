@@ -11,7 +11,7 @@ export 'package:core_plugin/lifecycle/app_lifecycle.dart';
 export 'package:core_plugin/lifecycle/observer.dart';
 
 class CorePlugin {
-  static Future<void> init() {
+  static Future<void> init() async {
     return CorePluginPlatform.instance.init();
   }
 

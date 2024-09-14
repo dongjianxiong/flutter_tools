@@ -1,11 +1,13 @@
 package cn.itbox.core_plugin
 
+import android.app.Application
 import android.content.Context
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.provider.Settings
 import android.util.Log
 import androidx.annotation.NonNull
+import cn.itbox.core_plugin.lifecycle.LifecycleInjector
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
@@ -16,22 +18,35 @@ import java.util.UUID
 
 /** CorePlugin */
 class CorePlugin : FlutterPlugin, MethodCallHandler {
-    /// The MethodChannel that will the communication between Flutter and native Android
-    ///
-    /// This local reference serves to register the plugin with the Flutter Engine and unregister it
-    /// when the Flutter Engine is detached from the Activity
-    private lateinit var channel: MethodChannel
+
     private var context: Context? = null
 
+    companion object {
+
+        private val channels = mutableMapOf<Int, MethodChannel>()
+
+        internal fun dispatchLifecycleEvent(isForeground: Boolean) {
+            channels.values.forEach { channel ->
+                kotlin.runCatching {
+                    val args = mapOf("state" to if (isForeground) "foreground" else "background")
+                    channel.invokeMethod("onLifecycleChanged", args)
+                }
+            }
+        }
+    }
 
     override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
-        channel = MethodChannel(flutterPluginBinding.binaryMessenger, "itbox_core_plugin")
-        channel.setMethodCallHandler(this)
         context = flutterPluginBinding.applicationContext
+        LifecycleInjector.inject(flutterPluginBinding.applicationContext as Application)
+
+        val channel = MethodChannel(flutterPluginBinding.binaryMessenger, "itbox_core_plugin")
+        channel.setMethodCallHandler(this)
+
+        channels[flutterPluginBinding.hashCode()] = channel
     }
 
     override fun onMethodCall(call: MethodCall, result: Result) {
-        if (call.method == "getAppVersionName") {
+        if (call.method == "getAppVersionName" || call.method == "getPlatformVersion") {
             context?.let {
                 try {
                     val packageInfo: PackageInfo =
@@ -40,8 +55,6 @@ class CorePlugin : FlutterPlugin, MethodCallHandler {
                 } catch (e: PackageManager.NameNotFoundException) {
                     e.printStackTrace()
                 }
-            }
-            if (context != null) {
             }
         } else if (call.method == "getDeviceId") {
             context?.let {
@@ -61,8 +74,6 @@ class CorePlugin : FlutterPlugin, MethodCallHandler {
                     result.success(id)
                 }
             }
-            if (context != null) {
-            }
         } else if (call.method == "complianceInit") {
             CoreEngine.delegate?.onComplianceInit()
         } else if (call.method == "activeInit") {
@@ -75,7 +86,9 @@ class CorePlugin : FlutterPlugin, MethodCallHandler {
     }
 
     override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
-        channel.setMethodCallHandler(null)
+        channels.remove(binding.hashCode())?.also {
+            it.setMethodCallHandler(null)
+        }
     }
 
     private fun getFlavorsName(): String? {

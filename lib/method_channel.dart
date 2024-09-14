@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:core_plugin/core_plugin.dart';
 import 'package:core_plugin/platform_interface.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -18,6 +19,16 @@ class MethodChannelCorePlugin extends CorePluginPlatform {
   @override
   Future<void> init() async {
     prefs = await SharedPreferences.getInstance();
+    methodChannel.setMethodCallHandler(onMethodCall);
+  }
+
+  Future<dynamic> onMethodCall(MethodCall call) async {
+    switch (call.method) {
+      case 'onLifecycleChanged':
+        final state = AppLifecycleState.fromState(call.arguments['state']);
+        AppLifecycleBinding.instance.dispatchLocalesChanged(state);
+        break;
+    }
   }
 
   @override
