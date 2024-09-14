@@ -3,15 +3,15 @@ import 'package:flutter/foundation.dart';
 import 'observer.dart';
 
 enum AppLifecycleState {
-  foreground(1),
-  background(2);
+  foreground('foreground'),
+  background('background');
 
   const AppLifecycleState(this.state);
-  final int state;
+  final String state;
 
   static AppLifecycleState fromState(dynamic state) {
     return AppLifecycleState.values.firstWhere(
-      (element) => element.state == state || state == element.name,
+      (element) => element.state == state,
       orElse: () => AppLifecycleState.foreground,
     );
   }
@@ -40,6 +40,7 @@ class AppLifecycleBinding {
 
   void dispatchLocalesChanged(AppLifecycleState state) {
     _state = state;
+    debugPrint('[INFO] [AppLifecycleState] App lifecycle state changed: $state');
     for (final AppLifecycleObserver observer in _observers) {
       if (state == AppLifecycleState.foreground) {
         observer.onForeground();
