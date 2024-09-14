@@ -2,13 +2,16 @@
 
 # 文件路径
 FILE="pubspec.yaml"
-IOS_PODSPEC="ios/code_check_plugin.podspec"
+CURRENT_DIR_NAME=$(basename "$PWD")
+
+IOS_PODSPEC="ios/$CURRENT_DIR_NAME.podspec"
+echo "[INFO]iOS IOS_PODSPEC: $CURRENT_VERSION"
 
 # 读取 pubspec.yaml 中的版本号
 VERSION_LINE=$(grep 'version:' $FILE)
 # shellcheck disable=SC2001
 CURRENT_VERSION=$(echo "$VERSION_LINE" | sed 's/version: //')
-echo "当前版本: $CURRENT_VERSION"
+echo "[INFO]当前版本: $CURRENT_VERSION"
 
 # 获取自增类型或指定版本号
 TYPE=$1
@@ -21,12 +24,12 @@ if [ "$TYPE" == "auto" ]; then
   LAST_VERSION=$(echo "$CURRENT_VERSION" | cut -d'.' -f3)
   LAST_VERSION=$((LAST_VERSION + 1))
   NEW_VERSION="${HEAD_VERSION}.${MID_VERSION}.${LAST_VERSION}"
-  echo "自动自增版本: $NEW_VERSION"
+  echo "[INFO]自动自增版本: $NEW_VERSION"
 
 # 检查是否传入了有效的版本号格式
 elif [[ $TYPE =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
   NEW_VERSION="$TYPE"
-  echo "指定版本: $NEW_VERSION"
+  echo "[INFO]指定版本: $NEW_VERSION"
 
 # 参数为空或传入了无效参数
 else
@@ -49,37 +52,37 @@ PLUGIN_VERSION_LINE=$(grep 'version:' $FILE)
 # shellcheck disable=SC2001
 CURRENT_PLUGIN_VERSION=$(echo "$PLUGIN_VERSION_LINE" | sed 's/version: //')
 if [ "$CURRENT_PLUGIN_VERSION" == "$NEW_VERSION" ]; then
-  echo "插件版本号已成功更新为 ${NEW_VERSION}"
+  echo "[INFO]插件版本号已成功更新为 ${NEW_VERSION}"
 else
   echo "[ERROR] 插件版本号更新失败"
 fi
 
 if grep -q "s.version = '${NEW_VERSION}'" "$IOS_PODSPEC"; then
-  echo "iOS 版本号已成功更新为 ${NEW_VERSION}"
+  echo "[INFO]iOS 版本号已成功更新为 ${NEW_VERSION}"
 else
   echo "[ERROR] iOS 版本号更新失败"
 fi
 
 
 # 升级版本号
-echo "升级版本号： $NEW_VERSION"
+echo "[INFO]升级版本号： $NEW_VERSION"
 
 # 添加更改到暂存区
 git add .
 
 # 提交更改并检查返回值
 if git commit -m "feat: 升级版本号"; then
-  echo "提交成功，开始 push 新的提交"
+  echo "[INFO]提交成功，开始 push 新的提交"
 
   # 执行 git push
   if git push; then
-    echo "Git push 成功"
+    echo "[INFO]Git push 成功"
 
     # 打 tag 并推送 tag
-    echo "开始打 tag"
+    echo "[INFO]开始打 tag"
     git tag "$NEW_VERSION"
     if git push origin "$NEW_VERSION"; then
-      echo "Tag $NEW_VERSION 推送成功"
+      echo "[INFO]Tag $NEW_VERSION 推送成功"
     else
       echo "[ERROR] Tag 推送失败"
     fi
@@ -96,7 +99,7 @@ if git commit -m "feat: 升级版本号"; then
 
     # 取消 add 操作（恢复暂存区）
     git reset
-    echo "已回滚到提交前的状态，版本号还原为：$CURRENT_VERSION"
+    echo "[INFO]已回滚到提交前的状态，版本号还原为：$CURRENT_VERSION"
   fi
 
 else
@@ -108,5 +111,5 @@ else
 
   # 取消 add 操作（恢复暂存区）
   git reset
-  echo "已还原暂存区，版本号还原为：$CURRENT_VERSION"
+  echo "[INFO]已还原暂存区，版本号还原为：$CURRENT_VERSION"
 fi
